@@ -3,14 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const app = express();
 
-//middle wear
-
-app.use((req, res, next) => {
-	res.status(404).json({
-		status: 'fail',
-	});
-});
-
+app.use(express.json());
 //API Routes: Get all restaurants
 app.get('/api/v1/restaurants', (req, res) => {
 	console.log('route handler ran');
@@ -23,13 +16,51 @@ app.get('/api/v1/restaurants', (req, res) => {
 });
 
 //API Routes: Get a specific restaurant
-app.get('/api/v1/restaurants/:restaurantId', (req, res) => {
+app.get('/api/v1/restaurants/:id', (req, res) => {
 	console.log(req.params);
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			restaurant: "McDonald's",
+		},
+	});
 });
 
 //API Routes: Create a Restaurant
 app.post('/api/v1/restaurants', (req, res) => {
-	console.log(req);
+	console.log(req.body);
+
+	res.status(201).json({
+		status: 'success',
+		data: {
+			restaurant: "McDonald's",
+		},
+	});
+});
+
+//API Routes: Update Restaurant
+app.put('/api/v1/restaurants/:id', (req, res) => {
+	console.log(req.params.id);
+	console.log(req.body);
+
+	res.status(200).json({
+		status: 'success',
+		data: {
+			restaurant: "McDonald's",
+		},
+	});
+});
+
+//API Routes: Delete Restaurant
+app.delete('/api/v1/restaurants/:id', (req, res) => {
+	console.log(req.params.id);
+
+	console.log(req.body);
+
+	res.status(204).json({
+		status: 'success',
+	});
 });
 
 const PORT = process.env.PORT || 3001;
