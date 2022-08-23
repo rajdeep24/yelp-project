@@ -7,26 +7,38 @@ const app = express();
 app.use(express.json());
 //API Routes: Get all restaurants
 app.get('/api/v1/restaurants', async (req, res) => {
-	const results = await db.query('SELECT * FROM restaurants');
-	console.log(results);
-	res.status(200).json({
-		status: 'success',
-		data: {
-			restaurant: ["McDonald's", 'Chick-fil-a'],
-		},
-	});
+	try {
+		const results = await db.query('SELECT * FROM restaurants');
+		console.log(results);
+
+		res.status(200).json({
+			status: 'success',
+			results: results.rows.length,
+			data: {
+				restaurants: results.rows,
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 //API Routes: Get a specific restaurant
-app.get('/api/v1/restaurants/:id', (req, res) => {
-	console.log(req.params);
+app.get('/api/v1/restaurants/:id', async (req, res) => {
+	try {
+		const results = await db.query('SELECT * FROM restaurants WHERE id = $1', [req.params.id]);
+		console.log(results.rows[0]);
 
-	res.status(200).json({
-		status: 'success',
-		data: {
-			restaurant: "McDonald's",
-		},
-	});
+		res.status(200).json({
+			status: 'success',
+			results: results.rows.length,
+			data: {
+				restaurant: results.rows[0],
+			},
+		});
+	} catch (error) {
+		console.log(error);
+	}
 });
 
 //API Routes: Create a Restaurant
